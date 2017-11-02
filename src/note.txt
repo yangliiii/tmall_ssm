@@ -1,0 +1,190 @@
+TMALL SSM版本开发流程：
+
+一、需求分析
+二、原型设计
+三、数据库设计
+四、技术选择：SSM框架 maven等
+
+五、环境搭建
+    1、创建maven仓库、GitHub搭建
+    2、IDEA创建maven项目
+六、整合
+    1、引入SSM所需要的jar包
+    2、创建实体类pojo
+    3、创建实体类对应的mapper类
+    4、创建mapper类对应的.xml文件：mybatis --> pojoMapper.xml
+        ①、其中<mappers namespace = "具体到实际pojoMapper.java"/>
+    5、创建service/serviceImpl/controller,且完成实现
+    6、创建spring配置文件：applicationContext.xml,其中配置如下(主要整合mybatis,开启spring注解，配置数据源)：
+        ①、配置注解
+            <context:annotation-config />
+        ②、配置需要扫描的service
+            <context:component-scan base-package="com.yanglies.tmall.service" />
+        ③、加载数据源配置文件.properties
+            <context:property-placeholder location="classpath:jdbc.properties"/>
+        ④、配置数据源（或者连接池：DruidDataSource）
+            <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+                <!-- 基本属性 url、user、password -->
+                <property name="url" value="${jdbc.url}" />
+                <property name="username" value="${jdbc.username}" />
+                <property name="password" value="${jdbc.password}" />
+
+                <!-- 配置初始化大小、最小、最大 -->
+                <property name="initialSize" value="1" />
+                <property name="minIdle" value="1" />
+                <property name="maxActive" value="20" />
+
+                <!-- 配置获取连接等待超时的时间 -->
+                <property name="maxWait" value="60000" />
+
+                <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+                <property name="timeBetweenEvictionRunsMillis" value="60000" />
+
+                <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+                <property name="minEvictableIdleTimeMillis" value="300000" />
+
+                <property name="validationQuery" value="SELECT 1" />
+                <property name="testWhileIdle" value="true" />
+                <property name="testOnBorrow" value="false" />
+                <property name="testOnReturn" value="false" />
+
+                <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+                <property name="poolPreparedStatements" value="true" />
+                <property name="maxPoolPreparedStatementPerConnectionSize"
+                          value="20" />
+            </bean>
+        ⑤、加载Mybatis的SessionFactory配置：SqlSessionFactoryBean
+            <bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
+                <property name="typeAliasesPackage" value="com.yanglies.tmall.pojo" />
+                <property name="dataSource" ref="dataSource"/>
+                <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+                <!--分页插件，目前先注释，后面重构的时候才会使用 -->
+                <property name="plugins">
+                    <array>
+                        <bean class="com.github.pagehelper.PageInterceptor">
+                            <property name="properties">
+                                <value>
+                                </value>
+                            </property>
+                        </bean>
+                    </array>
+                </property>
+            </bean>
+        ⑥、配置Mybatis的Mapper文件识别:MapperScannerConfigurer
+            <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+                <property name="basePackage" value="com.yanglies.tmall.mapper"/>
+            </bean>
+    7、配置SpringMVC配置文件：springMVC.xml
+        ①、启用注解
+            <context:annotation-config/>
+        ②、配置需要扫描的controller
+            <context:component-scan base-package="com.yanglies.tmall.controller">
+                <context:include-filter type="annotation"
+                                        expression="org.springframework.stereotype.Controller"/>
+            </context:component-scan>
+        ③、加载注解驱动
+            <mvc:annotation-driven />
+        ④、配置静态资源访问
+            <mvc:default-servlet-handler />
+        ⑤、加载视图定位:InternalResourceViewResolver
+            <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                <property name="viewClass"
+                          value="org.springframework.web.servlet.view.JstlView" />
+                <property name="prefix" value="/WEB-INF/jsp/" />
+                <property name="suffix" value=".jsp" />
+            </bean>
+        ⑥、加载文件上传解析：CommonsMultipartResolver
+            <bean id="multipartResolver"
+                class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+    8、配置web.xml
+        ①、加载spring的配置文件：applicationContext.xml
+            <context-param>
+                <param-name>contextConfigLocation</param-name>
+                <param-value>classpath:applicationContext.xml</param-value>
+            </context-param>
+            <listener>
+                <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+            </listener>
+        ②、配置中文过滤器
+            <filter>
+                <filter-name>CharacterEncodingFilter</filter-name>
+                <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+                <init-param>
+                  <param-name>encoding</param-name>
+                  <param-value>utf-8</param-value>
+                </init-param>
+            </filter>
+            <filter-mapping>
+                <filter-name>CharacterEncodingFilter</filter-name>
+                <url-pattern>/*</url-pattern>
+            </filter-mapping>
+        ③、加载springMVC的配置文件：springMVC.xml，配置核心servlet:DispatcherServlet
+            <servlet>
+                <servlet-name>mvc-dispatcher</servlet-name>
+                <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+                <!-- spring mvc的配置文件 -->
+                <init-param>
+                  <param-name>contextConfigLocation</param-name>
+                  <param-value>classpath:springMVC.xml</param-value>
+                </init-param>
+                <load-on-startup>1</load-on-startup>
+            </servlet>
+            <servlet-mapping>
+                <servlet-name>mvc-dispatcher</servlet-name>
+                <url-pattern>/</url-pattern>
+            </servlet-mapping>
+
+    9、加入tomcat，启动
+    10、SSM整合运行流程（）
+
+七、编码-后台管理
+    1、分类管理：Category
+        ①查询 list()
+        ②分页
+            a.新建分页类：Page
+                其中主要包括(start,count,total,defaultCount,getTotalPage(),getLast())等
+            b.修改mapper.xml对应查询语句，<if test="">limit #{start},#{count}</if>
+            c.编写对应controller操作，修改对应list(Model model,Page page)方法
+                新增Page参数：用于获取浏览器传递过来的分页参数信息
+                categoryService.list(page)：获取当前页的分类集合
+                获取分类总数，从而为分页对象设置总数
+                将分类集合和分页对象放置于 model中，进而进行页面跳转
+        ③新增(新增记录以及图片)
+            a.jsp中的添加页面：
+                enctype="multipart/form-data"   form表单中设置该项，才能正常上传文件
+                method="post"   确保中文提交
+                accept="image/*"    这样把上传的文件类型限制在了图片
+            b.编写mapper.xml的插入语句
+            c.编写UploadedImageFile类，用于添加分类时的参数，其中包含了MultipartFile变量，用于接受浏览器传入的图片
+            d.编写ImageUtil类，将传入的图片正常转换为jpg格式：change2jpg(File file)
+            e.在service/mapper中添加add(Category category)方法，serviceImpl中得以实现，并且在serviceImpl中注入了mapper
+            f.controller完成具体的访问实现，其中住了service,从而将mapper实例化
+                注入service
+                通过mapper.add(Categroy category)完成数据的插入
+                编写上传文件的流程步骤
+            g.添加分类伴随的上传文件步骤
+                -----------------上传图片--------------------
+                文件存放位置：D:\Work\apache-tomcat-7.0.81\webapps\tmall_ssm\img\category
+                所上传的文件对象：com.yanglies.tmall.util.UploadedImageFile@23037e46
+                所上传的具体文件：org.springframework.web.multipart.commons.CommonsMultipartFile@6436061
+                上传的文件转换后的存放文件名：D:\Work\apache-tomcat-7.0.81\webapps\tmall_ssm\img\category\27.jpg
+                -----------------上传图片--------------------
+                add(Category c,HttpSession session,UploadedImageFile file)
+                    Category c:浏览器传入的Category
+                    HttpSession session:用于获取ServletContext,从而获得文件存放位置
+                    UploadedImageFile file:用于接收上传文件
+                步骤流程：获取上传文件存放路径-->定义并创建上传的文件名-->创建上传文件所依赖的父级文件夹
+                -->获取上传文件-->将上传文件村放入指定的位置-->将上传文件转换为jpg-->写入指定文件存放目录。
+            h.添加成功之后跳转页面："redirect:/admin_category_list"
+        ④删除
+            a.配置mapper.xml
+            b.添加delete(int id)方法
+            c.controller中具体实现，删除数据库记录时同时删除对应的图片
+        ⑤编辑-跳转编辑页面
+            a.配置mapper.xml  id=get
+            b.添加get(int id)方法
+            c.controller中具体实现，get(int id,Model model),将获取的category实例放入Model中
+            d.页面跳转  "admin/editCategory"
+        ⑥编辑-修改
+            a.流程同前
+            b.controller中update实现，与 add 类似

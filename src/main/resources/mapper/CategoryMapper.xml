@@ -6,5 +6,27 @@
 <mapper namespace="com.yanglies.tmall.mapper.CategoryMapper">
     <select id="list" resultType="Category">
         select * from category order by id desc
+        <if test="start != null and count != null">
+            limit #{start},#{count};
+        </if>
     </select>
+    <select id="total" resultType="int">
+        SELECT COUNT(*) FROM category
+    </select>
+
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="Category">
+        INSERT INTO category (name) VALUES (#{name})
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM category where id = #{id}
+    </delete>
+
+    <select id="get" parameterType="int" resultType="Category">
+        SELECT * FROM category WHERE id = #{id}
+    </select>
+
+    <update id="update" parameterType="Category">
+        UPDATE category SET name = #{name} WHERE id = #{id}
+    </update>
 </mapper>
