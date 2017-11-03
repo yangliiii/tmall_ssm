@@ -13,8 +13,12 @@ import java.util.List;
  * @ProjectName tmall_ssm
  */
 public interface CategoryService {
-    List<Category> list(Page page);
-    int total();
+
+    //分页
+    List<Category> list();
+
+//    List<Category> list(Page page);
+//    int total();
     //新增
     void add(Category category);
     //删除

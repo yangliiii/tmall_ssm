@@ -1,5 +1,7 @@
 package com.yanglies.tmall.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.yanglies.tmall.pojo.Category;
 import com.yanglies.tmall.service.CategoryService;
 import com.yanglies.tmall.util.ImageUtil;
@@ -33,13 +35,38 @@ public class CategoryController {
     @Autowired
     CategoryService categoryService;
 
+//    @RequestMapping("admin_category_list")
+//    public String list(Model model, Page page){
+//        List<Category> cs= categoryService.list(page);
+//        int total = categoryService.total();
+//        page.setTotal(total);
+//        model.addAttribute("cs", cs);
+//        model.addAttribute("page",page);
+//        return "admin/listCategory";
+//    }
+
+    /**
+     *
+     * 通过PageHelper插件来实现分页
+     * @param model 将视图参数放入model
+     * @param page  分页参数
+     * @return
+     */
     @RequestMapping("admin_category_list")
-    public String list(Model model, Page page){
-        List<Category> cs= categoryService.list(page);
-        int total = categoryService.total();
+    public String list(Model model,Page page){
+        //通过PageHelper获取分页参数起始数和每页显示数据
+        PageHelper.offsetPage(page.getStart(),page.getCount());
+        //通过categoryService调用list()方法获取category
+        List<Category> categories = categoryService.list();
+
+        //获取总数据total
+        int total = (int) new PageInfo<>(categories).getTotal();
         page.setTotal(total);
-        model.addAttribute("cs", cs);
+
+        //将获取的categories  以及  分页page放入model
+        model.addAttribute("categories",categories);
         model.addAttribute("page",page);
+
         return "admin/listCategory";
     }
 

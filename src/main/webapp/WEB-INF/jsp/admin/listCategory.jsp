@@ -47,7 +47,7 @@
             </tr>
             </thead>
             <tbody>
-            <c:forEach items="${cs}" var="c">
+            <c:forEach items="${categories}" var="c">
 
                 <tr>
                     <td>${c.id}</td>

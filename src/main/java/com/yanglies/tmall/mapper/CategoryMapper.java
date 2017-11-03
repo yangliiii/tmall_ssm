@@ -1,27 +1,21 @@
 package com.yanglies.tmall.mapper;
 
 import com.yanglies.tmall.pojo.Category;
-import com.yanglies.tmall.util.Page;
-
+import com.yanglies.tmall.pojo.CategoryExample;
 import java.util.List;
 
-/**
- * lies, please leave something
- *
- * @author lies
- * @Createdon 2017/10/31 14:51.
- * @ProjectName tmall_ssm
- */
 public interface CategoryMapper {
-    List<Category> list(Page page);
-    int total();
-    //新增
-    void add(Category category);
-    //删除
-    void delete(int id);
-    //编辑-获取数据
-    Category get(int id);
-    //编辑-修改
-    void update(Category category);
+    int deleteByPrimaryKey(Integer id);
 
+    int insert(Category record);
+
+    int insertSelective(Category record);
+
+    List<Category> selectByExample(CategoryExample example);
+
+    Category selectByPrimaryKey(Integer id);
+
+    int updateByPrimaryKeySelective(Category record);
+
+    int updateByPrimaryKey(Category record);
 }

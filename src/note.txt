@@ -188,3 +188,36 @@ TMALL SSM版本开发流程：
         ⑥编辑-修改
             a.流程同前
             b.controller中update实现，与 add 类似
+
+八、重构
+    1、分页重构：PageHelper
+        ①、PageHelper的依赖jar包
+        ②、重构mapper.xml的配置文件，单纯实现数据查询，不需要进行limit分页
+        ③、重构service/mapper/的list()方法
+        ④、重构serviceImpl方法实现
+        ⑤、spring配置文件applicationContext.xml文件中加入PageHelper插件的配置  PageInterceptor
+            <property name="plugins">
+                <array>
+                    <bean class="com.github.pagehelper.PageInterceptor">
+                        <property name="properties">
+                            <value>
+                            </value>
+                        </property>
+                    </bean>
+                </array>
+            </property>
+        ⑥、重构controller中的list(Model model,Page page)方法
+            a.通过PageHelper指定分页参数 PageHelper.offSetPage(page.getStart(),page.Count());
+            b.通过categoryService获取数据categories，类型list
+            c.通过插件获取数据记录总数  int total = new PageInfo<>(categories).getTotal();
+            d.将数据传入model    categories以及page
+            e.页面跳转
+    2、重构-逆向工程
+        逆向工程使用了 MybatisGenerator这个工具：通过工具自动生成实体类、mapper.xml、以及mapper类
+        ①、自己定义一个工具类：
+            作用：MybatisGenerator插件是Mybatis官方提供的，这个插件存在一个固有的Bug，
+            及当第一次生成了CategoryMapper.xml之后，
+            再次运行会导致CategoryMapper.xml生成重复内容，而影响正常的运行。
+        ②、编写generatorConfig.xml
+            作用：为了正确使用本插件而提供必要的配置信息（详见配置文件：generatorConfig.xml）
+        ③、自动生成:实体类、mapper.xml、以及mapper类(通过main执行一次完成)

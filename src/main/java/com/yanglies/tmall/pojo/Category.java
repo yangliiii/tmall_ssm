@@ -1,21 +1,15 @@
 package com.yanglies.tmall.pojo;
 
-/**
- * lies, please leave something
- * 分类
- * @author lies
- * @Createdon 2017/10/31 14:49.
- * @ProjectName tmall_ssm
- */
 public class Category {
-    private int id;
+    private Integer id;
+
     private String name;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
