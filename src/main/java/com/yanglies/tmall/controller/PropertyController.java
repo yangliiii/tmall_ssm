@@ -41,7 +41,7 @@ public class PropertyController {
         //获取property的总记录数
         int total = (int) new PageInfo<>(properties).getTotal();
         page.setTotal(total);
-        page.setParam("&id" + category.getId());
+        page.setParam("&cid=" + category.getId());
 
         model.addAttribute("category",category);
         model.addAttribute("page",page);
