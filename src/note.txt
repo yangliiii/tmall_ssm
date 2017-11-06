@@ -221,3 +221,50 @@ TMALL SSM版本开发流程：
         ②、编写generatorConfig.xml
             作用：为了正确使用本插件而提供必要的配置信息（详见配置文件：generatorConfig.xml）
         ③、自动生成:实体类、mapper.xml、以及mapper类(通过main执行一次完成)
+
+九、后台：属性管理（一个分类，对应多个属性）
+    1、通过mybatis逆向工程，生成实体类、pojoExample类、mapper、mapper.xml
+    2、Property中 新加category属性
+    3、编写service,增加CRUD方法，其中list(int cid):查询Property时，需要携带对应category的ID
+        void add(Property property);
+        void  delete(int id);
+        void update(Property property);
+        Property get(int id);
+        List list(int cid);
+    4、提供serviceImpl，注入PropertyMapper,完成CRUD实现
+        查询:List(int cid)->通过辅助类Example来实现
+            PropertyExample example =new PropertyExample();
+            //获取cid字段。
+            example.createCriteria().andCidEqualTo(cid);
+            example.setOrderByClause("id desc");
+            return propertyMapper.selectByExample(example);
+    5、实现controller
+        注入CategoryService、PropertyService
+        a.获取分类，为获得Property对应属性的cid
+        b.通过PageHelper获取分页参数
+        c.通过PageInfo获取总数total
+        d.获取List<property>
+        e.页面跳转
+    6、属性-新增功能
+        a.PropertyService完成数据库数据的保存
+        b.客户端跳转：return "redirect:admin_property_list?cid=" + property.getCid();
+    7、属性-跳转编辑页面功能
+        a.传入参数id
+        b.根据传入的property参数ID，获取到property
+        c.根据property的cid属性，然后获取到category
+        d.将category传入到property中
+        e.服务端跳转到编辑页面
+    8、属性-修改
+        a.传入参数Property
+        b.通过PropertyService修改数据
+        c.然后客户端跳转，并且携带上对应的category id
+    9、属性-删除
+        a.传入需要删除的property的id
+        b.通过propertyService进行删除
+        c.然后客户端跳转
+    10、产品（Product）的增删改查和属性类似
+
+十、后台
+    1、产品图片管理（略）
+    2、产品属性管理
+

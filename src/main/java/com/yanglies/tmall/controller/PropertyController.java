@@ -41,7 +41,7 @@ public class PropertyController {
         //获取property的总记录数
         int total = (int) new PageInfo<>(properties).getTotal();
         page.setTotal(total);
-        page.setParam("&id" + category.getId());
+        page.setParam("&cid=" + category.getId());
 
         model.addAttribute("category",category);
         model.addAttribute("page",page);
@@ -54,5 +54,32 @@ public class PropertyController {
     public String add(Property property){
         propertyService.add(property);
         return "redirect:admin_property_list?cid=" + property.getCid();
+    }
+
+    @RequestMapping("admin_property_edit")
+    public String edit(Model model,int id){
+        //获取对应ID的属性
+        Property property = propertyService.get(id);
+        //查询出该ID对应属性所对应的分类
+        Category category = categoryService.get(property.getCid());
+        //使该属性中包含了该分类
+        property.setCategory(category);
+        //将对象放入request中
+        model.addAttribute("property",property);
+        //服务端跳转
+        return "admin/editProperty";
+    }
+
+    @RequestMapping("admin_property_update")
+    public String update(Property property){
+        propertyService.update(property);
+        return "redirect:admin_property_list?cid=" + property.getCid();
+    }
+
+    @RequestMapping("admin_property_delete")
+    public String delete(int id){
+        Property p = propertyService.get(id);
+        propertyService.delete(id);
+        return "redirect:admin_property_list?cid=" + p.getCid();
     }
 }
