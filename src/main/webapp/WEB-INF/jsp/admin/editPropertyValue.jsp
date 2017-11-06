@@ -5,6 +5,7 @@
 <%@include file="../include/admin/adminHeader.jsp"%>
 <%@include file="../include/admin/adminNavigator.jsp"%>
 
+
 <title>编辑产品属性值</title>
 
 <script>
@@ -48,3 +49,4 @@
     </div>
 
 </div>
+
