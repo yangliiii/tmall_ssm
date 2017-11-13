@@ -11,6 +11,7 @@ import com.yanglies.tmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -82,16 +83,45 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    public void setCategory(Product product){
+    public void setCategory(Product product) {
         int cid = product.getCid();
         Category category = categoryService.get(cid);
         product.setCategory(category);
     }
 
-    public void setCategory(List<Product> products){
+    public void setCategory(List<Product> products) {
         for (Product p :
                 products) {
             setCategory(p);
+        }
+    }
+
+    @Override
+    public void fill(List<Category> cs) {
+        for (Category c : cs) {
+            fill(c);
+        }
+    }
+
+    @Override
+    public void fill(Category c) {
+        List<Product> ps = list(c.getId());
+        c.setProducts(ps);
+    }
+
+    @Override
+    public void fillByRow(List<Category> cs) {
+        int productNumberEachRow = 8;
+        for (Category c : cs) {
+            List<Product> products = c.getProducts();
+            List<List<Product>> productsByRow = new ArrayList<>();
+            for (int i = 0; i < products.size(); i += productNumberEachRow) {
+                int size = i + productNumberEachRow;
+                size = size > products.size() ? products.size() : size;
+                List<Product> productsOfEachRow = products.subList(i, size);
+                productsByRow.add(productsOfEachRow);
+            }
+            c.setProductsByRow(productsByRow);
         }
     }
 }

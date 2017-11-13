@@ -1,5 +1,6 @@
 package com.yanglies.tmall.service;
 
+import com.yanglies.tmall.pojo.Category;
 import com.yanglies.tmall.pojo.Product;
 
 import java.util.List;
@@ -24,4 +25,10 @@ public interface ProductService {
     List list(int cid);
 
     void setFirstProductImage(Product p);
+
+    void fill(List<Category> cs);
+
+    void fill(Category c);
+
+    void fillByRow(List<Category> cs);
 }
