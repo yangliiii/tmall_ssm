@@ -2,7 +2,7 @@
          pageEncoding="UTF-8" isELIgnored="false"%>
 
 <div class="categoryMenu">
-    <c:forEach items="${categories}" var="c">
+    <c:forEach items="${cs}" var="c">
         <div cid="${c.id}" class="eachCategory">
             <span class="glyphicon glyphicon-link"></span>
             <a href="forecategory?cid=${c.id}">

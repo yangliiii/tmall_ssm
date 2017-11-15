@@ -11,12 +11,12 @@
     });
 
 </script>
-<c:forEach items="${categories}" var="c">
+<c:forEach items="${cs}" var="c">
     <div cid="${c.id}" class="productsAsideCategorys">
 
         <c:forEach items="${c.productsByRow}" var="ps">
             <div class="row show1">
-                <c:forEach items="${productList}" var="p">
+                <c:forEach items="${ps}" var="p">
                     <c:if test="${!empty p.subTitle}">
                         <a href="foreproduct?pid=${p.id}">
                             <c:forEach items="${fn:split(p.subTitle, ' ')}" var="title" varStatus="st">
