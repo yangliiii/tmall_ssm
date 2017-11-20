@@ -24,4 +24,6 @@ public interface UserService {
     List list();
 
     boolean isExist(String username);
+
+    User get(String name,String pwd);
 }

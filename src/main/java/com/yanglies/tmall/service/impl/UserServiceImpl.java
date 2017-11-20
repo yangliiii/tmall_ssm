@@ -58,4 +58,15 @@ public class UserServiceImpl implements UserService {
             return true;
         return false;
     }
+
+    @Override
+    public User get(String name, String pwd) {
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andNameEqualTo(name).andPasswordEqualTo(pwd);
+        List<User> user = userMapper.selectByExample(userExample);
+        if (!user.isEmpty()){
+            return user.get(0);
+        }
+        return null;
+    }
 }

@@ -4,8 +4,8 @@
 <script>
     $(function(){
 
-        <c:if test="${!empty msg}">
-        $("span.errorMessage").html("${msg}");
+        <c:if test="${!empty m}">
+        $("span.errorMessage").html("${m}");
         $("div.registerErrorMessageDiv").css("visibility","visible");
         </c:if>
 
@@ -70,7 +70,7 @@
 
             <tr>
                 <td colspan="2" class="registerButtonTD">
-                    <a href="registerSuccess.jsp"><button>提   交</button></a>
+                    <a href="../fore/registerSuccess.jsp"><button>提   交</button></a>
                 </td>
             </tr>
         </table>
