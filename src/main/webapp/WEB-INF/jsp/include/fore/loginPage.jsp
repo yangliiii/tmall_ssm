@@ -4,8 +4,8 @@
 <script>
     $(function(){
 
-        <c:if test="${!empty m}">
-        $("span.errorMessage").html("${m}");
+        <c:if test="${!empty msg}">
+        $("span.errorMessage").html("${msg}");
         $("div.loginErrorMessageDiv").show();
         </c:if>
 

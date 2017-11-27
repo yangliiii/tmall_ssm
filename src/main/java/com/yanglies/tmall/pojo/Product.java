@@ -1,6 +1,7 @@
 package com.yanglies.tmall.pojo;
 
 import java.util.Date;
+import java.util.List;
 
 public class Product {
     private Integer id;
@@ -19,11 +20,51 @@ public class Product {
 
     private Date createDate;
 
-    //费数据库字段，一个产品对于的分类
+    //非数据库字段，一个产品对于的分类
     private Category category;
 
     //产品对应的图片
     private ProductImage firstProductImage;
+
+    private List<ProductImage> productSingleImage;
+
+    private List<ProductImage> productDetailImage;
+
+    private Integer saleCount;
+
+    private Integer reviewCount;
+
+    public List<ProductImage> getProductSingleImage() {
+        return productSingleImage;
+    }
+
+    public void setProductSingleImage(List<ProductImage> productSingleImage) {
+        this.productSingleImage = productSingleImage;
+    }
+
+    public List<ProductImage> getProductDetailImage() {
+        return productDetailImage;
+    }
+
+    public void setProductDetailImage(List<ProductImage> productDetailImage) {
+        this.productDetailImage = productDetailImage;
+    }
+
+    public Integer getSaleCount() {
+        return saleCount;
+    }
+
+    public void setSaleCount(Integer saleCount) {
+        this.saleCount = saleCount;
+    }
+
+    public Integer getReviewCount() {
+        return reviewCount;
+    }
+
+    public void setReviewCount(Integer reviewCount) {
+        this.reviewCount = reviewCount;
+    }
 
     public ProductImage getFirstProductImage() {
         return firstProductImage;

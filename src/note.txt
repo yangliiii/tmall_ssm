@@ -268,3 +268,22 @@ TMALL SSM版本开发流程：
     1、产品图片管理（略）
     2、产品属性管理
 
+
+十一、前端-无需登录
+    1、注册
+        ①前端页面准备 regiest.jsp，使用包含的形式。
+        ②User 保存 name = HtmlUtils.htmlEscape(name);
+            判断是否存在，存在则提示信息，不存在则保存。
+        ③注册成功之后，到注册成功页面。
+    2、登录
+        ①登录页面 login.jsp,其中包含header.jsp,loginPage.jsp,footer.jsp
+        ②校验
+            UserService 实现get(name,pwd)方法，校验是否匹配，如果匹配则登录，不匹配则提示错误信息。
+            Controller 实现：
+                login(@RequestParam("name") String username,
+                        @RequestParam("pwd" String pwd),
+                        Model model,HttpSession session)
+        ③校验成功之后，转发到home页面，并且携带用户信息。
+    3、退出
+        ①点击“退出”出发ForeController.logout 方法，session中去掉user ,继而跳转到首页。
+

@@ -13,6 +13,17 @@ public class Review {
 
     private Date createDate;
 
+    //评论对应一个用户
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Integer getId() {
         return id;
     }
