@@ -5,9 +5,7 @@ import com.yanglies.tmall.pojo.Category;
 import com.yanglies.tmall.pojo.Product;
 import com.yanglies.tmall.pojo.ProductExample;
 import com.yanglies.tmall.pojo.ProductImage;
-import com.yanglies.tmall.service.CategoryService;
-import com.yanglies.tmall.service.ProductImageService;
-import com.yanglies.tmall.service.ProductService;
+import com.yanglies.tmall.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +30,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductImageService productImageService;
+
+    @Autowired
+    private OrderItemService orderItemService;
+
+    @Autowired
+    private ReviewService reviewService;
 
     @Override
     public void add(Product product) {
@@ -122,6 +126,26 @@ public class ProductServiceImpl implements ProductService {
                 productsByRow.add(productsOfEachRow);
             }
             c.setProductsByRow(productsByRow);
+        }
+    }
+
+    @Override
+    public void setSaleAndReviewNumber(Product product) {
+        //获取产品的销售数量
+        int saleCount = orderItemService.getSaleCount(product.getId());
+        product.setSaleCount(saleCount);
+
+        //获取产品的评论数
+        int reviewCount = reviewService.getCount(product.getId());
+        product.setReviewCount(reviewCount);
+
+    }
+
+    @Override
+    public void setSaleAndReviewNumber(List<Product> products) {
+        for (Product p :
+                products) {
+            setSaleAndReviewNumber(p);
         }
     }
 }

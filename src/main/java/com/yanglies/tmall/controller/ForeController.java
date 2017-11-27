@@ -1,7 +1,6 @@
 package com.yanglies.tmall.controller;
 
-import com.yanglies.tmall.pojo.Category;
-import com.yanglies.tmall.pojo.User;
+import com.yanglies.tmall.pojo.*;
 import com.yanglies.tmall.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,6 +36,29 @@ public class ForeController {
     OrderService orderService;
     @Autowired
     OrderItemService orderItemService;
+    @Autowired
+    ReviewService reviewService;
+
+    @RequestMapping("foreproduct")
+    public String product(int pid,Model model){
+        //根据传入的产品ID获取产品信息
+        Product p = productService.get(pid);
+        //获取产品p之后，获取对应的SingleImage 和 DetailImage
+        List<ProductImage> productSingleImages = productImageService.list(p.getId(),ProductImageService.type_single);
+        List<ProductImage> productDetailImages = productImageService.list(p.getId(),ProductImageService.type_detail);
+        p.setProductSingleImage(productSingleImages);
+        p.setProductDetailImage(productDetailImages);
+
+        //获取产品的属性信息
+        List<PropertyValue> pvs = propertyValueService.list(p.getId());
+        List<Review> reviews = reviewService.list(p.getId());
+        productService.setSaleAndReviewNumber(p);
+        //将获取到的信息放入request中
+        model.addAttribute("p" , p);
+        model.addAttribute("pvs",pvs);
+        model.addAttribute("reviews",reviews);
+        return "fore/product";
+    }
 
     @RequestMapping("forelogout")
     public String logout(HttpSession session){
