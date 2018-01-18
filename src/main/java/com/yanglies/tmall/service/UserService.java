@@ -1,29 +1,16 @@
 package com.yanglies.tmall.service;
+ 
+import java.util.List;
 
 import com.yanglies.tmall.pojo.User;
 
-import java.util.List;
-
-/**
- * lies, please leave something
- *
- * @author lies
- * @Createdon 2017/11/13 13:56.
- * @ProjectName tmall_ssm
- */
 public interface UserService {
-
-    void add(User user);
-
+    void add(User c);
     void delete(int id);
-
-    void update(User user);
-
+    void update(User c);
     User get(int id);
-
     List list();
+    boolean isExist(String name);
 
-    boolean isExist(String username);
-
-    User get(String name,String pwd);
+    User get(String name, String password);
 }

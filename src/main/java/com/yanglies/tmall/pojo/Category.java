@@ -7,26 +7,10 @@ public class Category {
 
     private String name;
 
-    //分类下的产品
+    /*如下是非数据库字段*/
     private List<Product> products;
-    //分类下产品的集合
+
     private List<List<Product>> productsByRow;
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
-
-    public List<List<Product>> getProductsByRow() {
-        return productsByRow;
-    }
-
-    public void setProductsByRow(List<List<Product>> productsByRow) {
-        this.productsByRow = productsByRow;
-    }
 
     public Integer getId() {
         return id;
@@ -42,5 +26,21 @@ public class Category {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public List<List<Product>> getProductsByRow() {
+        return productsByRow;
+    }
+
+    public void setProductsByRow(List<List<Product>> productsByRow) {
+        this.productsByRow = productsByRow;
     }
 }

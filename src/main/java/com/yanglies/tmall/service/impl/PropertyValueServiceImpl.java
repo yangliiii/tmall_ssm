@@ -1,6 +1,5 @@
 package com.yanglies.tmall.service.impl;
 
-import com.yanglies.tmall.mapper.PropertyMapper;
 import com.yanglies.tmall.mapper.PropertyValueMapper;
 import com.yanglies.tmall.pojo.Product;
 import com.yanglies.tmall.pojo.Property;
@@ -13,53 +12,47 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * lies, please leave something
- *  PropertyValue 的CRUD实现。
- * @author lies
- * @Createdon 2017/11/6 16:58.
- * @ProjectName tmall_ssm
- */
 @Service
-public class PropertyValueServiceImpl implements PropertyValueService
-{
+public class PropertyValueServiceImpl implements PropertyValueService {
 
     @Autowired
     PropertyValueMapper propertyValueMapper;
 
+
     @Autowired
     PropertyService propertyService;
 
+
     @Override
-    public void init(Product product) {
-        List<Property> properties = propertyService.list(product.getId());
-        for(Property property : properties){
-            PropertyValue propertyValue = get(property.getId(),product.getId());
-            if (null == propertyValue){
-                propertyValue = new PropertyValue();
-                propertyValue.setPid(product.getId());
-                propertyValue.setPtid(property.getId());
-                propertyValueMapper.insert(propertyValue);
+    public void init(Product p) {
+
+        List<Property> pts = propertyService.list(p.getCid());
+
+        for (Property pt: pts) {
+            PropertyValue pv = get(pt.getId(),p.getId());
+            if(null==pv){
+                pv = new PropertyValue();
+                pv.setPid(p.getId());
+                pv.setPtid(pt.getId());
+                propertyValueMapper.insert(pv);
             }
         }
 
     }
 
     @Override
-    public void update(PropertyValue propertyValue) {
-        propertyValueMapper.updateByPrimaryKeySelective(propertyValue);
+    public void update(PropertyValue pv) {
+        propertyValueMapper.updateByPrimaryKeySelective(pv);
     }
 
     @Override
     public PropertyValue get(int ptid, int pid) {
-        //使用PropertyValueExample
         PropertyValueExample example = new PropertyValueExample();
         example.createCriteria().andPtidEqualTo(ptid).andPidEqualTo(pid);
-        List<PropertyValue> propertyValues = propertyValueMapper.selectByExample(example);
-        if(propertyValues.isEmpty()){
+        List<PropertyValue> pvs= propertyValueMapper.selectByExample(example);
+        if (pvs.isEmpty())
             return null;
-        }
-        return propertyValues.get(0);
+        return pvs.get(0);
     }
 
     @Override

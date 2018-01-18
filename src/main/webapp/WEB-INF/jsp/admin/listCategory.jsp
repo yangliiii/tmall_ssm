@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: lies
-  Date: 2017/10/31
-  Time: 15:40
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" import="java.util.*"%>
 
@@ -47,7 +40,7 @@
             </tr>
             </thead>
             <tbody>
-            <c:forEach items="${categories}" var="c">
+            <c:forEach items="${cs}" var="c">
 
                 <tr>
                     <td>${c.id}</td>

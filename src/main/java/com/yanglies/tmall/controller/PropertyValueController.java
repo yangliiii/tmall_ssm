@@ -12,13 +12,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
-/**
- * lies, please leave something
- *
- * @author lies
- * @Createdon 2017/11/6 17:29.
- * @ProjectName tmall_ssm
- */
 @Controller
 @RequestMapping("")
 public class PropertyValueController {
@@ -28,7 +21,7 @@ public class PropertyValueController {
     ProductService productService;
 
     @RequestMapping("admin_propertyValue_edit")
-    public String edit(Model model, int pid) {
+    public String edit(Model model,int pid) {
         Product p = productService.get(pid);
         propertyValueService.init(p);
         List<PropertyValue> pvs = propertyValueService.list(p.getId());

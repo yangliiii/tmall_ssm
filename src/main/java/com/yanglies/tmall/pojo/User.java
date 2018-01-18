@@ -31,23 +31,22 @@ public class User {
         this.password = password == null ? null : password.trim();
     }
 
-    //匿名显示评论者
     public String getAnonymousName(){
-        if (null == name) {
+        if(null==name)
             return null;
-        }
-        if (name.length() <= 1){
+
+        if(name.length()<=1)
             return "*";
-        }
-        //X*
-        if (name.length() == 2) {
-            return name.substring(0,1) + "*";
-        }
-        //X*X
-        char[] cs = name.toCharArray();
-        for(int i = 1;i < cs.length - 1;i++){
-            cs[i] = '*';
+
+        if(name.length()==2)
+            return name.substring(0,1) +"*";
+
+        char[] cs =name.toCharArray();
+        for (int i = 1; i < cs.length-1; i++) {
+            cs[i]='*';
         }
         return new String(cs);
+
+
     }
 }

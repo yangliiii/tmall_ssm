@@ -1,30 +1,23 @@
 package com.yanglies.tmall.service.impl;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.yanglies.tmall.mapper.UserMapper;
 import com.yanglies.tmall.pojo.User;
 import com.yanglies.tmall.pojo.UserExample;
 import com.yanglies.tmall.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-
-/**
- * lies, please leave something
- *
- * @author lies
- * @Createdon 2017/11/13 14:01.
- * @ProjectName tmall_ssm
- */
 @Service
 public class UserServiceImpl implements UserService {
-
     @Autowired
     UserMapper userMapper;
 
     @Override
-    public void add(User user) {
-        userMapper.insert(user);
+    public void add(User u) {
+        userMapper.insert(u);
     }
 
     @Override
@@ -33,8 +26,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(User user) {
-        userMapper.updateByPrimaryKeySelective(user);
+    public void update(User u) {
+        userMapper.updateByPrimaryKeySelective(u);
     }
 
     @Override
@@ -42,31 +35,33 @@ public class UserServiceImpl implements UserService {
         return userMapper.selectByPrimaryKey(id);
     }
 
-    @Override
-    public List list() {
-        UserExample userExample = new UserExample();
-        userExample.setOrderByClause("id desc");
-        return userMapper.selectByExample(userExample);
+    public List<User> list(){
+        UserExample example =new UserExample();
+        example.setOrderByClause("id desc");
+        return userMapper.selectByExample(example);
+
     }
 
     @Override
-    public boolean isExist(String username) {
-        UserExample userExample = new UserExample();
-        userExample.createCriteria().andNameEqualTo(username);
-        List<User> result = userMapper.selectByExample(userExample);
-        if (!result.isEmpty())
+    public boolean isExist(String name) {
+        UserExample example =new UserExample();
+        example.createCriteria().andNameEqualTo(name);
+        List<User> result= userMapper.selectByExample(example);
+        if(!result.isEmpty())
             return true;
         return false;
+
     }
 
     @Override
-    public User get(String name, String pwd) {
-        UserExample userExample = new UserExample();
-        userExample.createCriteria().andNameEqualTo(name).andPasswordEqualTo(pwd);
-        List<User> user = userMapper.selectByExample(userExample);
-        if (user.isEmpty()){
+    public User get(String name, String password) {
+        UserExample example =new UserExample();
+        example.createCriteria().andNameEqualTo(name).andPasswordEqualTo(password);
+        List<User> result= userMapper.selectByExample(example);
+        if(result.isEmpty())
             return null;
-        }
-        return user.get(0);
+        return result.get(0);
     }
+
+
 }

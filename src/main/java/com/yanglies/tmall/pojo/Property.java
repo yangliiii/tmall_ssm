@@ -7,8 +7,8 @@ public class Property {
 
     private String name;
 
-    //非数据库字段，属性对应的分类
-    private Category category;
+    /*非数据库字段*/
+    private Category  category;
 
     public Category getCategory() {
         return category;
@@ -17,7 +17,6 @@ public class Property {
     public void setCategory(Category category) {
         this.category = category;
     }
-
     public Integer getId() {
         return id;
     }

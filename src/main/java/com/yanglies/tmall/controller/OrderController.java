@@ -1,27 +1,22 @@
 package com.yanglies.tmall.controller;
 
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yanglies.tmall.pojo.Order;
 import com.yanglies.tmall.service.OrderItemService;
 import com.yanglies.tmall.service.OrderService;
 import com.yanglies.tmall.util.Page;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
 
-/**
- * lies, please leave something
- *
- * @author lies
- * @Createdon 2017/11/13 14:45.
- * @ProjectName tmall_ssm
- */
 @Controller
 @RequestMapping("")
 public class OrderController {

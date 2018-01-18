@@ -1,30 +1,21 @@
 package com.yanglies.tmall.service.impl;
 
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import com.yanglies.tmall.mapper.ReviewMapper;
 import com.yanglies.tmall.pojo.Review;
 import com.yanglies.tmall.pojo.ReviewExample;
 import com.yanglies.tmall.pojo.User;
 import com.yanglies.tmall.service.ReviewService;
 import com.yanglies.tmall.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-
-/**
- * lies, please leave something
- *
- * @author lies
- * @Createdon 2017/11/27 17:03.
- * @ProjectName tmall_ssm
- */
 @Service
 public class ReviewServiceImpl implements ReviewService {
-
     @Autowired
-    private ReviewMapper reviewMapper;
+    ReviewMapper reviewMapper;
     @Autowired
-    private UserService userService;
+    UserService userService;
 
     @Override
     public void add(Review c) {
@@ -46,15 +37,26 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewMapper.selectByPrimaryKey(id);
     }
 
-    @Override
-    public List<Review> list(int pid) {
-        ReviewExample reviewExample = new ReviewExample();
-        reviewExample.createCriteria().andPidEqualTo(pid);
-        reviewExample.setOrderByClause("id desc");
-        List<Review> reviews = reviewMapper.selectByExample(reviewExample);
+    public List<Review> list(int pid){
+        ReviewExample example =new ReviewExample();
+        example.createCriteria().andPidEqualTo(pid);
+        example.setOrderByClause("id desc");
 
-        setUser(reviews);
-        return reviews;
+        List<Review> result =reviewMapper.selectByExample(example);
+        setUser(result);
+        return result;
+    }
+
+    public void setUser(List<Review> reviews){
+        for (Review review : reviews) {
+            setUser(review);
+        }
+    }
+
+    private void setUser(Review review) {
+        int uid = review.getUid();
+        User user =userService.get(uid);
+        review.setUser(user);
     }
 
     @Override
@@ -62,16 +64,4 @@ public class ReviewServiceImpl implements ReviewService {
         return list(pid).size();
     }
 
-    private void setUer(Review review){
-        int uid = review.getUid();
-        User user = userService.get(uid);
-        review.setUser(user);
-    }
-
-    private void setUser(List<Review> reviews){
-        for (Review review:
-             reviews) {
-            setUer(review);
-        }
-    }
 }

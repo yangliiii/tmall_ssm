@@ -9,6 +9,7 @@ public class PropertyValue {
 
     private String value;
 
+    /*非数据库字段*/
     private Property property;
 
     public Property getProperty() {

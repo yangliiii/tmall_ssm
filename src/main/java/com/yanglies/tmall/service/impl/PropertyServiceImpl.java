@@ -2,30 +2,25 @@ package com.yanglies.tmall.service.impl;
 
 import com.yanglies.tmall.mapper.PropertyMapper;
 import com.yanglies.tmall.pojo.Category;
+import com.yanglies.tmall.pojo.Product;
 import com.yanglies.tmall.pojo.Property;
 import com.yanglies.tmall.pojo.PropertyExample;
+import com.yanglies.tmall.service.CategoryService;
 import com.yanglies.tmall.service.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * lies, please leave something
- *
- * @author lies
- * @Createdon 2017/11/3 15:29.
- * @ProjectName tmall_ssm
- */
+
 @Service
 public class PropertyServiceImpl implements PropertyService {
-
     @Autowired
     PropertyMapper propertyMapper;
 
     @Override
-    public void add(Property property) {
-        propertyMapper.insert(property);
+    public void add(Property p) {
+        propertyMapper.insert(p);
     }
 
     @Override
@@ -34,8 +29,8 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public void update(Property property) {
-        propertyMapper.updateByPrimaryKeySelective(property);
+    public void update(Property p) {
+        propertyMapper.updateByPrimaryKeySelective(p);
     }
 
     @Override
@@ -45,10 +40,12 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public List list(int cid) {
-        PropertyExample example = new PropertyExample();
+        PropertyExample example =new PropertyExample();
         example.createCriteria().andCidEqualTo(cid);
         example.setOrderByClause("id desc");
-
         return propertyMapper.selectByExample(example);
     }
+
+
+
 }

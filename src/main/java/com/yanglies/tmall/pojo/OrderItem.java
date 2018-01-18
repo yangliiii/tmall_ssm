@@ -11,16 +11,8 @@ public class OrderItem {
 
     private Integer number;
 
-    //非数据库字段，订单项下需要显示产品的图片，因此需要添加Product属性
+    /*非数据库字段*/
     private Product product;
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
 
     public Integer getId() {
         return id;
@@ -60,5 +52,13 @@ public class OrderItem {
 
     public void setNumber(Integer number) {
         this.number = number;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

@@ -1,23 +1,18 @@
 package com.yanglies.tmall.service.impl;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.yanglies.tmall.mapper.OrderMapper;
 import com.yanglies.tmall.pojo.Order;
 import com.yanglies.tmall.pojo.OrderExample;
 import com.yanglies.tmall.pojo.User;
 import com.yanglies.tmall.service.OrderService;
 import com.yanglies.tmall.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
 
-/**
- * lies, please leave something
- *
- * @author lies
- * @Createdon 2017/11/13 14:43.
- * @ProjectName tmall_ssm
- */
 @Service
 public class OrderServiceImpl implements OrderService {
     @Autowired
@@ -49,17 +44,9 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> list(){
         OrderExample example =new OrderExample();
         example.setOrderByClause("id desc");
-        List<Order> result =orderMapper.selectByExample(example);
-        setUser(result);
-        return result;
+        return orderMapper.selectByExample(example);
+
     }
-    public void setUser(List<Order> os){
-        for (Order o : os)
-            setUser(o);
-    }
-    public void setUser(Order o){
-        int uid = o.getUid();
-        User u = userService.get(uid);
-        o.setUser(u);
-    }
+
+
 }

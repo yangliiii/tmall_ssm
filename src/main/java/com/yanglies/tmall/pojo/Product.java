@@ -20,59 +20,20 @@ public class Product {
 
     private Date createDate;
 
-    //非数据库字段，一个产品对于的分类
-    private Category category;
 
-    //产品对应的图片
+    /*非数据库字段*/
+    private Category  category;
+
     private ProductImage firstProductImage;
 
-    private List<ProductImage> productSingleImage;
+    private List<ProductImage> productSingleImages;
 
-    private List<ProductImage> productDetailImage;
+    private List<ProductImage> productDetailImages;
 
-    private Integer saleCount;
+    private int saleCount;
 
-    private Integer reviewCount;
+    private int reviewCount;
 
-    public List<ProductImage> getProductSingleImage() {
-        return productSingleImage;
-    }
-
-    public void setProductSingleImage(List<ProductImage> productSingleImage) {
-        this.productSingleImage = productSingleImage;
-    }
-
-    public List<ProductImage> getProductDetailImage() {
-        return productDetailImage;
-    }
-
-    public void setProductDetailImage(List<ProductImage> productDetailImage) {
-        this.productDetailImage = productDetailImage;
-    }
-
-    public Integer getSaleCount() {
-        return saleCount;
-    }
-
-    public void setSaleCount(Integer saleCount) {
-        this.saleCount = saleCount;
-    }
-
-    public Integer getReviewCount() {
-        return reviewCount;
-    }
-
-    public void setReviewCount(Integer reviewCount) {
-        this.reviewCount = reviewCount;
-    }
-
-    public ProductImage getFirstProductImage() {
-        return firstProductImage;
-    }
-
-    public void setFirstProductImage(ProductImage firstProductImage) {
-        this.firstProductImage = firstProductImage;
-    }
 
     public Category getCategory() {
         return category;
@@ -144,5 +105,46 @@ public class Product {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public ProductImage getFirstProductImage() {
+        return firstProductImage;
+    }
+
+
+    public void setFirstProductImage(ProductImage firstProductImage) {
+        this.firstProductImage = firstProductImage;
+    }
+
+    public List<ProductImage> getProductSingleImages() {
+        return productSingleImages;
+    }
+
+    public void setProductSingleImages(List<ProductImage> productSingleImages) {
+        this.productSingleImages = productSingleImages;
+    }
+
+    public List<ProductImage> getProductDetailImages() {
+        return productDetailImages;
+    }
+
+    public void setProductDetailImages(List<ProductImage> productDetailImages) {
+        this.productDetailImages = productDetailImages;
+    }
+
+    public int getSaleCount() {
+        return saleCount;
+    }
+
+    public void setSaleCount(int saleCount) {
+        this.saleCount = saleCount;
+    }
+
+    public int getReviewCount() {
+        return reviewCount;
+    }
+
+    public void setReviewCount(int reviewCount) {
+        this.reviewCount = reviewCount;
     }
 }
