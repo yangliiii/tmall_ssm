@@ -31,4 +31,17 @@
 
     <!-- 对上传文件的解析-->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+
+    <!-- 用户登录状态拦截器 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/fore*"/>
+            <bean class="com.yanglies.tmall.intercepter.LoginInterceptor"></bean>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/fore*"/>
+            <bean class="com.yanglies.tmall.intercepter.OtherInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+    
 </beans>

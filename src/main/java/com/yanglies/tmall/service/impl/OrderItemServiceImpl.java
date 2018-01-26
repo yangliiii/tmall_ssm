@@ -103,4 +103,21 @@ public class OrderItemServiceImpl implements OrderItemService {
         return result;
     }
 
+    /**
+     * 查询当前User相应的订单项
+     * @param uid 当前用户的ID
+     * @return
+     */
+    @Override
+    public List<OrderItem> listByUser(int uid) {
+        OrderItemExample example = new OrderItemExample();
+        //设置查询条件：当前User的ID，且无对应订单ID的
+        example.createCriteria().andUidEqualTo(uid).andOidIsNull();
+        List<OrderItem> result = orderItemMapper.selectByExample(example);
+        //将产品填充到该订单项中
+        setProduct(result);
+        //将持有商品的订单项返回
+        return result;
+    }
+
 }

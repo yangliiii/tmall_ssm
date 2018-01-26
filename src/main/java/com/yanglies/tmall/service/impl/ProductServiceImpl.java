@@ -122,6 +122,24 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    /**
+     * 产品查询 通过关键字模糊查询
+     * @param keyword
+     * @return
+     */
+    @Override
+    public List<Product> search(String keyword) {
+        ProductExample example = new ProductExample();
+        //设置查询条件
+        example.createCriteria().andNameLike("%" + keyword + "%");
+        //ID降序
+        example.setOrderByClause("id desc");
+        List result = productMapper.selectByExample(example);
+        setFirstProductImage(result);
+        setCategory(result);
+        return result;
+    }
+
     @Override
     public void fill(Category c) {
         List<Product> ps = list(c.getId());
