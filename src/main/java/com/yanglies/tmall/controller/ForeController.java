@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.yanglies.tmall.comparator.*;
 import com.yanglies.tmall.pojo.*;
 import com.yanglies.tmall.service.*;
+import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,9 +16,8 @@ import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpSession;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping("")
@@ -294,5 +294,65 @@ public class ForeController {
         List<OrderItem> ois = orderItemService.listByUser(user.getId());
         model.addAttribute("ois",ois);
         return "fore/cart";
+    }
+
+    /**
+     * 结算页面操作，调整订单数量
+     *
+     * @param model
+     * @param session
+     * @param pid
+     * @param number
+     * @return
+     */
+    @RequestMapping("forechangeOrderItem")
+    @ResponseBody
+    public String changeOrderItem(Model model, HttpSession session, int pid, int number){
+        User user = (User) session.getAttribute("user");
+        if (null == user) {
+            return "fail";
+        }
+        List<OrderItem> ois = orderItemService.listByUser(user.getId());
+        for (OrderItem oi :
+                ois) {
+            if (oi.getProduct().getId().intValue() == pid) {
+                oi.setNumber(number);
+                //更新当前OrderItem项的数量
+                orderItemService.update(oi);
+                break;
+            }
+        }
+        return "cuccess";
+    }
+
+    /**
+     * 删除OrderItem项
+     *
+     * @param session
+     * @param oiid
+     * @return
+     */
+    @RequestMapping("foredeleteOrderItem")
+    @ResponseBody
+    public String deleteOrderItem(HttpSession session, int oiid){
+        User user = (User) session.getAttribute("user");
+        if (null == user) {
+            return "fail";
+        }
+        orderItemService.delete(oiid);
+        return "cuccess";
+    }
+
+    @RequestMapping("forecreateOrder")
+    public String createOrder(Model model, Order order, HttpSession session){
+        User user = (User) session.getAttribute("user");
+        // 订单号
+        String orderCode = new SimpleDateFormat().format(new Date()) + RandomUtils.nextInt(10000);
+        order.setUid(user.getId());
+        order.setCreateDate(new Date());
+        order.setOrderCode(orderCode);
+
+
+        return "";
     }
 }

@@ -3,6 +3,7 @@ package com.yanglies.tmall.service;
 import java.util.List;
 
 import com.yanglies.tmall.pojo.Order;
+import com.yanglies.tmall.pojo.OrderItem;
 
 public interface OrderService {
 
@@ -19,4 +20,6 @@ public interface OrderService {
     void update(Order c);
     Order get(int id);
     List list();
+
+    float add(Order order, List<OrderItem> ois);
 }
