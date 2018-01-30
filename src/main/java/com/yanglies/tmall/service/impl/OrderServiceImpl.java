@@ -57,33 +57,39 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      *
-     * @param order
+     * @param o
      * @param ois
      * @return
      */
-    @Transactional(propagation = Propagation.REQUIRED, rollbackForClassName = "Exception")
     @Override
-    public float add(Order order, List<OrderItem> ois) {
-
+    @Transactional(propagation= Propagation.REQUIRED,rollbackForClassName="Exception")
+    public float add(Order o, List<OrderItem> ois) {
         float total = 0;
-        add(order);
+        add(o);
 
-        // 模拟事务回滚
-        if (false) {
+        if(false)
             throw new RuntimeException();
-        }
 
-        for (OrderItem oi : ois) {
-            // 为OrderItem关联上Order项
-            oi.setOid(order.getId());
-            // 更新OrderItem
+        for (OrderItem oi: ois) {
+            oi.setOid(o.getId());
             orderItemService.update(oi);
-            // 总价
-            total += oi.getProduct().getPromotePrice() * oi.getNumber();
+            total+=oi.getProduct().getPromotePrice()*oi.getNumber();
         }
-
-        //返回总价
         return total;
+    }
+
+    /**
+     * 查询Order
+     * @param uid
+     * @param excludedStatus
+     * @return
+     */
+    @Override
+    public List list(int uid, String excludedStatus) {
+        OrderExample example = new OrderExample();
+        example.createCriteria().andUidEqualTo(uid).andStatusNotEqualTo(excludedStatus);
+        example.setOrderByClause("id desc");
+        return orderMapper.selectByExample(example);
     }
 
 

@@ -344,15 +344,41 @@ public class ForeController {
     }
 
     @RequestMapping("forecreateOrder")
-    public String createOrder(Model model, Order order, HttpSession session){
-        User user = (User) session.getAttribute("user");
-        // 订单号
-        String orderCode = new SimpleDateFormat().format(new Date()) + RandomUtils.nextInt(10000);
-        order.setUid(user.getId());
-        order.setCreateDate(new Date());
+    public String createOrder( Model model,Order order,HttpSession session){
+        User user =(User)  session.getAttribute("user");
+        String orderCode = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()) + RandomUtils.nextInt(10000);
         order.setOrderCode(orderCode);
+        order.setCreateDate(new Date());
+        order.setUid(user.getId());
+        order.setStatus(OrderService.waitPay);
+        List<OrderItem> ois= (List<OrderItem>)  session.getAttribute("ois");
 
+        float total =orderService.add(order,ois);
+        return "redirect:forealipay?oid="+order.getId() +"&total="+total;
+    }
 
-        return "";
+    @RequestMapping("forepayed")
+    public String payed(int oid, float total, Model model) {
+        Order order = orderService.get(oid);
+        order.setStatus(OrderService.waitDelivery);
+        order.setPayDate(new Date());
+        orderService.update(order);
+        model.addAttribute("o", order);
+        return "fore/payed";
+    }
+
+    /**
+     *
+     * @return
+     */
+    @RequestMapping("forebought")
+    public String bought(Model model, HttpSession session){
+        User user = (User) session.getAttribute("user");
+        // 查询出支付状态不为delete的所有订单
+        List<Order> os =  orderService.list(user.getId(),OrderService.delete);
+        // 为订单填充订单项
+        orderItemService.fill(os);
+        model.addAttribute("os",os);
+        return "fore/bought";
     }
 }
