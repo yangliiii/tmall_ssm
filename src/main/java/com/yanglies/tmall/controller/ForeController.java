@@ -381,4 +381,98 @@ public class ForeController {
         model.addAttribute("os",os);
         return "fore/bought";
     }
+
+    /**
+     * 确认收货
+     * @param model
+     * @param oid
+     * @return
+     */
+    @RequestMapping("foreconfirmPay")
+    public String confirmPay( Model model,int oid) {
+        Order o = orderService.get(oid);
+        orderItemService.fill(o);
+        model.addAttribute("o", o);
+        return "fore/confirmPay";
+    }
+
+    /**
+     * 确认收货成功
+     * @param model
+     * @param oid
+     * @return
+     */
+    @RequestMapping("foreorderConfirmed")
+    public String orderConfirmed( Model model,int oid) {
+        Order o = orderService.get(oid);
+        o.setStatus(OrderService.waitReview);
+        o.setConfirmDate(new Date());
+        orderService.update(o);
+        return "fore/orderConfirmed";
+    }
+
+    /**
+     * 删除订单
+     * @param model
+     * @param oid
+     * @return
+     */
+    @RequestMapping("foredeleteOrder")
+    @ResponseBody
+    public String deleteOrder( Model model,int oid){
+        Order o = orderService.get(oid);
+        // 不是真正的删除，将订单状态修改为删除
+        o.setStatus(OrderService.delete);
+        orderService.update(o);
+        return "success";
+    }
+
+    /**
+     * 评价
+     * @param model
+     * @param oid
+     * @return
+     */
+    @RequestMapping("forereview")
+    public String review( Model model,int oid) {
+        Order o = orderService.get(oid);
+        orderItemService.fill(o);
+        Product p = o.getOrderItems().get(0).getProduct();
+        List<Review> reviews = reviewService.list(p.getId());
+        productService.setSaleAndReviewNumber(p);
+        model.addAttribute("p", p);
+        model.addAttribute("o", o);
+        model.addAttribute("reviews", reviews);
+        return "fore/review";
+    }
+
+    /**
+     * 提交评论
+     * @param model
+     * @param session
+     * @param oid
+     * @param pid
+     * @param content
+     * @return
+     */
+    @RequestMapping("foredoreview")
+    public String doreview( Model model,HttpSession session,@RequestParam("oid") int oid,@RequestParam("pid") int pid,String content) {
+        Order o = orderService.get(oid);
+        o.setStatus(OrderService.finish);
+        orderService.update(o);
+
+        Product p = productService.get(pid);
+        content = HtmlUtils.htmlEscape(content);
+
+        User user =(User)  session.getAttribute("user");
+        Review review = new Review();
+        review.setContent(content);
+        review.setPid(pid);
+        review.setCreateDate(new Date());
+        review.setUid(user.getId());
+        reviewService.add(review);
+
+        return "redirect:forereview?oid="+oid+"&showonly=true";
+    }
 }
+
